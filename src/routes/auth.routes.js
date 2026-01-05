@@ -6,6 +6,7 @@ const { signupSchema, loginSchema } = require("../validators/authValidators");
 const {
   signupController,
   loginController,
+    refreshController,
 } = require("../controllers/authController");
 
 function authRoutes() {
@@ -21,6 +22,9 @@ function authRoutes() {
     validate(loginSchema),
     tryCatchHandler(loginController)
   );
+
+   router.get("/refresh", tryCatchHandler(refreshController));
+
   return router;
 }
 
