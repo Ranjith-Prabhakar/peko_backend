@@ -1,9 +1,11 @@
 const express = require("express");
 const tryCatchHandler = require("../utils/tryCatch");
 const validate = require("../middlewares/genericValidator");
-const { signupSchema } = require("../validators/authValidators");
+const { signupSchema, loginSchema } = require("../validators/authValidators");
+
 const {
   signupController,
+  loginController,
 } = require("../controllers/authController");
 
 function authRoutes() {
@@ -14,6 +16,11 @@ function authRoutes() {
     tryCatchHandler(signupController)
   );
  
+    router.post(
+    "/login",
+    validate(loginSchema),
+    tryCatchHandler(loginController)
+  );
   return router;
 }
 
