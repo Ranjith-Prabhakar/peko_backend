@@ -24,7 +24,7 @@ async function updateTokens(refreshToken) {
   const newRefreshToken = generateRefreshToken({ userId, sessionId: sid });
 
   await saveSession(sid, {
-    id: session._id,
+    id: session.id,
     role: session.role,
     name: session.name,
     email: session.email,
@@ -35,7 +35,7 @@ async function updateTokens(refreshToken) {
     accessToken,
     refreshToken: newRefreshToken,
     user: {
-      id: session._id,
+      id: session.id,
       role: session.role,
       name: session.name,
       email: session.email,

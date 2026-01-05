@@ -1,5 +1,6 @@
 const { refresh } = require("../../services/auth.service");
 const { refreshTokenOptions } = require("../../config/cookie");
+const { default: ApiError } = require("../../utils/ApiError");
 
 async function refreshController(req, res) {
   const refreshToken = req.cookies.refreshToken;

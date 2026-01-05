@@ -1,9 +1,5 @@
 module.exports = {
-  version: '1.0.0',
-  baseUrl: '/api/v1',
-  allowedOrigins : [
-      'https://example.com',
-      'https://admin.example.com',
-      'http://localhost:3000'
-    ]
+  version: "1.0.0",
+  baseUrl: "/api/v1",
+  allowedOrigins: ["http://localhost:5173"],
 };

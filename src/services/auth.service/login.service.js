@@ -23,16 +23,17 @@ const login = async (email, password, req) => {
   const sessionId = uuidv4();
 
   const accessToken = generateAccessToken({
-    userId: user._id,
+    userId: user.id,
   });
 
   const refreshToken = generateRefreshToken({
-    userId: user._id,
+    userId: user.id,
     sessionId,
   });
+  console.log("user ==>", user);
 
   await saveSession(sessionId, {
-    id: user._id,
+    id: user.id,
     role: user.role,
     name: user.name,
     email: user.email,
@@ -43,7 +44,7 @@ const login = async (email, password, req) => {
     accessToken,
     refreshToken,
     user: {
-      id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
