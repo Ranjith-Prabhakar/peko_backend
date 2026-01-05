@@ -9,9 +9,11 @@ async function refreshController(req, res) {
     throw new ApiError(401, "Unauthorized");
   }
 
-  const { accessToken, refreshToken: newRefreshToken } = await refresh(
-    refreshToken
-  );
+  const {
+    accessToken,
+    refreshToken: newRefreshToken,
+    user,
+  } = await refresh(refreshToken);
 
   res
     .cookie("refreshToken", newRefreshToken, refreshTokenOptions)
@@ -19,7 +21,7 @@ async function refreshController(req, res) {
     .json({
       success: true,
       message: "Token refreshed successfuliy",
-      data: { accessToken, user },
+      data: { accessToken, data: user },
     });
 }
 
