@@ -1,5 +1,5 @@
 const authRepository = require("../../repositories/auth.repository");
-const ApiError = require("../../utils/ApiError");
+const { default: ApiError } = require("../../utils/ApiError");
 const {
   generateAccessToken,
   generateRefreshToken,
