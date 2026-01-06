@@ -5,6 +5,7 @@ const generateAccessToken = ({ userId, role }) => {
   return jwt.sign(
     {
       userId,
+      role,
       tokenType: "access",
     },
     JWT_ACCESS_SECRET,

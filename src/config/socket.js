@@ -1,40 +1,63 @@
-const { Server: IOServer } = require("socket.io");
-const constants = require("./app"); // contains allowedOrigins
-const { allowedOrigins } = constants;
+const { Server } = require("socket.io");
+const redis = require("../config/redis");
+const { verifyToken } = require("../utils/token");
+const { JWT_ACCESS_SECRET } = require("../config/env");
 
 let io;
 
-async function connectSocket(httpServer) {
-  io = new IOServer(httpServer, {
+function initSocket(server) {
+  io = new Server(server, {
     cors: {
-      origin: allowedOrigins,
-      credentials: true,
-    },
+      origin: process.env.CLIENT_URL,
+      credentials: true
+    }
   });
 
-  io.on("connection", (socket) => {
-    const id = socket.handshake.auth?.id;
-    console.log("=================================");
-    console.log("Connected id:", id);
-    console.log("Client connected:", socket.id);
+  // 🔐 Authenticate socket using ACCESS token
+  io.use((socket, next) => {
+    try {
+      const token = socket.handshake.auth?.token;
+      if (!token) throw new Error("Token missing");
 
-    // Listen for messages from this client
-    socket.on("message", (msg) => {
-      console.log("Received message from client:", msg);
-    });
+      const payload = verifyToken(token, JWT_ACCESS_SECRET);
 
-    // Send a welcome message to all other clients
-    socket.broadcast.emit("welcome", `User ${id || socket.id} joined`);
+      socket.userId = payload.userId;
+      socket.role = payload.role;
 
-    // Send socket ID only to this client
-    socket.emit("your-id", socket.id);
+      next();
+    } catch (err) {
+      next(new Error("Unauthorized"));
+    }
+  });
 
-    // Handle disconnect
-    socket.on("disconnect", () => {
-      console.log("Client disconnected:", socket.id);
-      socket.broadcast.emit("user-disconnected", socket.id);
+  io.on("connection", async (socket) => {
+    const { userId, role } = socket;
+
+    console.log(`User ${userId} (${role}) connected → ${socket.id}`);
+
+    // ✅ Store socketId in Redis
+    await redis.sadd(`user:sockets:${userId}`, socket.id);
+
+    // ✅ User room
+    socket.join(`user:${userId}`);
+
+    // ✅ Role room
+    socket.join(`role:${role}`);
+
+    socket.emit("welcome", "Socket connected");
+
+    socket.on("disconnect", async () => {
+      console.log(`User ${userId} disconnected → ${socket.id}`);
+      await redis.srem(`user:sockets:${userId}`, socket.id);
     });
   });
+
+  return io;
 }
 
-module.exports = { io, connectSocket };
+function getIO() {
+  if (!io) throw new Error("Socket.io not initialized");
+  return io;
+}
+
+module.exports = { initSocket, getIO };

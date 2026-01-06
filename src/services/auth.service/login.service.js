@@ -24,6 +24,7 @@ const login = async (email, password, req) => {
 
   const accessToken = generateAccessToken({
     userId: user.id,
+    role: user.role,
   });
 
   const refreshToken = generateRefreshToken({

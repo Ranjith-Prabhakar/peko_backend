@@ -3,7 +3,7 @@ const app = require("./app");
 const { PORT } = require("./config/env");
 const { sequelize } = require("../models");
 const { createServer } = require("http");
-const { connectSocket } = require("./config/socket");
+const { initSocket } = require("./config/socket");
 
 async function startServer() {
   try {
@@ -11,7 +11,7 @@ async function startServer() {
     console.log("DB connection established successfully.");
 
     const httpServer = createServer(app);
-    await connectSocket(httpServer);
+    await initSocket(httpServer);
 
     httpServer.listen(PORT, () => {
       console.log(`Server running on http://127.0.0.1:${PORT}`);
