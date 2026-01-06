@@ -50,7 +50,7 @@ function ticketRoute() {
 );
 
     router.get(
-      "/tickets/:ticketId/messages",
+      "/:ticketId/messages",
       authMiddleware,
       tryCatchHandler(getTicketMessagesController)
     );

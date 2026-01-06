@@ -3,6 +3,7 @@ const redis = require("../config/redis");
 const { verifyToken } = require("../utils/token");
 const { JWT_ACCESS_SECRET } = require("../config/env");
 const { allowedOrigins } = require("../config/app");
+const { registerChatSocket } = require("../sockets/chat.socket");
 
 let io;
 
@@ -54,6 +55,7 @@ function initSocket(httpServer) {
     socket.join(`user:${userId}`);
     socket.join(`role:${role}`);
 
+    registerChatSocket(io, socket);
     socket.emit("welcome", "Socket connected");
 
     socket.on("disconnect", async () => {

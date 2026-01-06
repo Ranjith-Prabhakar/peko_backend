@@ -1,11 +1,14 @@
 const { TicketMessage } = require("../../models");
-const { notifyAdminsMessage, notifyUserMessage } = require("../utils/socket");
-
 function registerChatSocket(io, socket) {
   socket.on(
     "message-to-server-from-client-to-peer",
     async ({ toAddress, message }) => {
       try {
+        const {
+          notifyAdminsMessage,
+          notifyUserMessage
+        } = require("../utils/socket");
+
         const { ticketId, senderId, senderName, message: text } = message;
 
         const savedMessage = await TicketMessage.create({
@@ -39,5 +42,6 @@ function registerChatSocket(io, socket) {
     }
   );
 }
+
 
 module.exports = { registerChatSocket };

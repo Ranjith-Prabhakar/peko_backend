@@ -14,4 +14,4 @@ const findMessagesByTicketId = async (ticketId) => {
   });
 };
 
-module.exports = { findMessagesByTicketId };
+module.exports =  findMessagesByTicketId ;
