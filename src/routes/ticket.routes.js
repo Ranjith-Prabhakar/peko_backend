@@ -11,7 +11,8 @@ const {
   getTicketsController,
   getTicketByIdController,
   markTicketViewedController,
-  updateTicketStatusController
+  updateTicketStatusController,
+  getTicketMessagesController 
 } = require("../controllers/ticketController");
 
 function ticketRoute() {
@@ -48,6 +49,11 @@ function ticketRoute() {
   tryCatchHandler(updateTicketStatusController)
 );
 
+    router.get(
+      "/tickets/:ticketId/messages",
+      authMiddleware,
+      tryCatchHandler(getTicketMessagesController)
+    );
   return router;
 }
 
