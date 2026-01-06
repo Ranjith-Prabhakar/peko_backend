@@ -31,8 +31,7 @@ const login = async (email, password) => {
     userId: user.id,
     sessionId,
   });
-  console.log("user ==>", user);
-
+  
   await saveSession(sessionId, {
     id: user.id,
     role: user.role,
