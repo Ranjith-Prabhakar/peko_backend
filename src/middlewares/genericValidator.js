@@ -5,6 +5,7 @@ const validate = (schema) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
+      console.log("Validation error:", error);
       const errorMessages = error.details.map((detail) => detail.message);
       return next(
         new ApiError(400, `Validation failed: ${errorMessages.join(", ")}`)

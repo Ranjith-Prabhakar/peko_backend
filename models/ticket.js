@@ -11,17 +11,37 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Ticket.init({
-    userId: { type: DataTypes.INTEGER, allowNull: false },
-    title: { type: DataTypes.STRING, allowNull: false },
-    description: { type: DataTypes.TEXT, allowNull: false },
-    categoryId: { type: DataTypes.INTEGER, allowNull: false },
-    priority: { type: DataTypes.ENUM('low','medium','high'), defaultValue: 'medium' },
-    status: { type: DataTypes.ENUM('open','in_progress','resolved','closed'), defaultValue: 'open' }
-  }, {
-    sequelize,
-    modelName: 'Ticket',
-  });
+  Ticket.init(
+    {
+      userId: { type: DataTypes.INTEGER, allowNull: false },
+
+      title: { type: DataTypes.STRING, allowNull: false },
+
+      description: { type: DataTypes.TEXT, allowNull: false },
+
+      categoryId: { type: DataTypes.INTEGER, allowNull: false },
+
+      priority: {
+        type: DataTypes.ENUM('low', 'medium', 'high'),
+        defaultValue: 'medium'
+      },
+
+      status: {
+        type: DataTypes.ENUM('open', 'in_progress', 'resolved', 'closed'),
+        defaultValue: 'open'
+      },
+
+      isViewedByAdmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
+    },
+    {
+      sequelize,
+      modelName: 'Ticket'
+    }
+  );
 
   return Ticket;
 };
