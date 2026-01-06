@@ -6,7 +6,6 @@ const { getSession } = require("../utils/session.utils");
 const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw new ApiError(401, "Access token missing");
     }
@@ -20,7 +19,6 @@ const authMiddleware = async (req, res, next) => {
 
     const accessPayload = verifyToken(accessToken, JWT_ACCESS_SECRET);
 
-    console.log("accessssssssssssssssss")
     const refreshPayload = verifyToken(refreshToken, JWT_REFRESH_SECRET);
 
     const { sid } = refreshPayload;
