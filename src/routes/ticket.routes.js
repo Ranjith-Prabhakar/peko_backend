@@ -3,7 +3,7 @@ const tryCatchHandler = require("../utils/tryCatch");
 const authMiddleware = require("../middlewares/authMiddleware");
 const validate = require("../middlewares/genericValidator");
 const { ticketSchema} = require("../validators");
-
+const checkTicketStatusPermission = require("../middlewares/ticketStatusPermission");
 
 
 const {
@@ -44,6 +44,7 @@ function ticketRoute() {
   router.patch(
   "/:id/status",
   authMiddleware,
+  checkTicketStatusPermission,
   tryCatchHandler(updateTicketStatusController)
 );
 

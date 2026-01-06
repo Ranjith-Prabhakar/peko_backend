@@ -9,5 +9,5 @@ module.exports = {
   getTickets,
   findTicketById,
   updateTicketViewStatus,
-  updateTicketStatusRepository
+  updateTicketStatusRepository,
 };

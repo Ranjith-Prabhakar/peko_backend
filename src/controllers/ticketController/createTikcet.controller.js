@@ -9,7 +9,8 @@ async function createTikcetController(req, res) {
     description,
     categoryId,
     priority,
-    userId
+    userId,
+    user: req.user
   });
 
   res.status(201).json({

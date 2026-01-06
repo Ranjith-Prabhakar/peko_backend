@@ -1,18 +1,21 @@
 const { createTicket } = require("../../repositories/ticket.repository");
-const { notifyAdmins } = require("../../utils/socket");
+const { notifyAdminsNewTicket } = require("../../utils/socket");
 
 const createTicketService = async (payload) => {
-  const ticket = await createTicket(payload);
+  const { user, ...ticketPayload } = payload;
 
-  notifyAdmins({
+  const ticket = await createTicket(ticketPayload);
+
+  notifyAdminsNewTicket({
     type: "NEW_TICKET",
     ticketId: ticket.id,
     title: ticket.title,
-    createdBy: payload.userId,
+    userId: user.id,
+    createdByName: user.name,
+    createdAt: new Date().toISOString(),
   });
 
   return ticket;
 };
-
 
 module.exports = createTicketService;
