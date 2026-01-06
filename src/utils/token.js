@@ -15,7 +15,7 @@ const generateAccessToken = ({ userId, role }) => {
   );
 };
 
-const generateRefreshToken = ({ userId, role, sessionId }) => {
+const generateRefreshToken = ({ userId,sessionId }) => {
   return jwt.sign(
     {
       userId,

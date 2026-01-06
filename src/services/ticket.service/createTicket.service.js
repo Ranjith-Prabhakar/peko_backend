@@ -4,14 +4,15 @@ const { notifyAdmins } = require("../../utils/socket");
 const createTicketService = async (payload) => {
   const ticket = await createTicket(payload);
 
-    notifyAdmins({
+  notifyAdmins({
     type: "NEW_TICKET",
     ticketId: ticket.id,
     title: ticket.title,
-    createdBy: userId
+    createdBy: payload.userId,
   });
-  
+
   return ticket;
 };
+
 
 module.exports = createTicketService;

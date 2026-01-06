@@ -8,7 +8,7 @@ const { comparePassword } = require("../../utils/hashing");
 const { saveSession } = require("../../utils/session.utils");
 const { v4: uuidv4 } = require("uuid");
 
-const login = async (email, password, req) => {
+const login = async (email, password) => {
   const user = await authRepository.findUserByEmail(email);
 
   if (!user) {

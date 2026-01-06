@@ -20,6 +20,7 @@ const authMiddleware = async (req, res, next) => {
 
     const accessPayload = verifyToken(accessToken, JWT_ACCESS_SECRET);
 
+    console.log("accessssssssssssssssss")
     const refreshPayload = verifyToken(refreshToken, JWT_REFRESH_SECRET);
 
     const { sid } = refreshPayload;

@@ -7,7 +7,6 @@ const loginController = async (req, res) => {
   const { accessToken, refreshToken, user } = await authService.login(
     email,
     password,
-    req
   );
 
   res.cookie("refreshToken", refreshToken, refreshTokenOptions);

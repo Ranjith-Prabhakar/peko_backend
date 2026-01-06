@@ -1,22 +1,29 @@
-const { Server } = require("socket.io");
+const socketIO = require("socket.io");
 const redis = require("../config/redis");
 const { verifyToken } = require("../utils/token");
 const { JWT_ACCESS_SECRET } = require("../config/env");
+const { allowedOrigins } = require("../config/app");
 
 let io;
 
-function initSocket(server) {
-  io = new Server(server, {
+function initSocket(httpServer) {
+  io = new socketIO.Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: allowedOrigins,
       credentials: true
     }
   });
 
-  // 🔐 Authenticate socket using ACCESS token
+  io.engine.on("connection_error", (err) => {
+    console.error("Socket engine error:", err.message);
+  });
+
   io.use((socket, next) => {
     try {
+      console.log("Socket handshake attempt");
+
       const token = socket.handshake.auth?.token;
+      console.log("token",token)
       if (!token) throw new Error("Token missing");
 
       const payload = verifyToken(token, JWT_ACCESS_SECRET);
@@ -24,8 +31,13 @@ function initSocket(server) {
       socket.userId = payload.userId;
       socket.role = payload.role;
 
+      console.log(
+        `Auth success → user:${payload.userId}, role:${payload.role}`
+      );
+
       next();
     } catch (err) {
+      console.error("Socket auth failed:", err.message);
       next(new Error("Unauthorized"));
     }
   });
@@ -33,21 +45,21 @@ function initSocket(server) {
   io.on("connection", async (socket) => {
     const { userId, role } = socket;
 
-    console.log(`User ${userId} (${role}) connected → ${socket.id}`);
+    console.log(
+      ` connected user:${userId} role:${role} socket:${socket.id}`
+    );
 
-    // ✅ Store socketId in Redis
     await redis.sadd(`user:sockets:${userId}`, socket.id);
 
-    // ✅ User room
     socket.join(`user:${userId}`);
-
-    // ✅ Role room
     socket.join(`role:${role}`);
 
     socket.emit("welcome", "Socket connected");
 
     socket.on("disconnect", async () => {
-      console.log(`User ${userId} disconnected → ${socket.id}`);
+      console.log(
+        `disconnected user:${userId} socket:${socket.id}`
+      );
       await redis.srem(`user:sockets:${userId}`, socket.id);
     });
   });
@@ -56,7 +68,9 @@ function initSocket(server) {
 }
 
 function getIO() {
-  if (!io) throw new Error("Socket.io not initialized");
+  if (!io) {
+    throw new Error("Socket.io not initialized");
+  }
   return io;
 }
 

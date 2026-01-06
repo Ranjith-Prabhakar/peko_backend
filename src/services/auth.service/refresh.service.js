@@ -9,7 +9,7 @@ const { saveSession, getSession } = require("../../utils/session.utils");
 
 async function updateTokens(refreshToken) {
   const decoded = verifyToken(refreshToken, JWT_REFRESH_SECRET);
-  const { userId, sid, role } = decoded;
+  const { userId, sid } = decoded;
 
   const session = await getSession(sid);
   if (!session) {
@@ -20,8 +20,15 @@ async function updateTokens(refreshToken) {
     throw new ApiError(401, "Invalid refresh token");
   }
 
-  const accessToken = generateAccessToken({ userId, role });
-  const newRefreshToken = generateRefreshToken({ userId, sessionId: sid });
+  const accessToken = generateAccessToken({
+    userId: session.id,
+    role: session.role,
+  });
+
+  const newRefreshToken = generateRefreshToken({
+    userId: session.id,
+    sessionId: sid,
+  });
 
   await saveSession(sid, {
     id: session.id,
