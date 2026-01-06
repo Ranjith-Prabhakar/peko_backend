@@ -38,7 +38,6 @@ const authMiddleware = async (req, res, next) => {
       throw new ApiError(401, "Refresh token mismatch");
     }
 
-    console.log("session-------",session)
     req.user = {
       id: session.id,
       name: session.name,

@@ -2,9 +2,7 @@ const { createTicketService } = require("../../services/ticket.service");
 
 async function createTikcetController(req, res) {
   const { title, description, categoryId, priority } = req.body;
-  console.log("req.body=========", req.body);
   const userId = req.user.id;
-  console.log("userId============", userId);
 
   const ticket = await createTicketService({
     title,
