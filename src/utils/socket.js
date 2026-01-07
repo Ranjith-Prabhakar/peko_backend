@@ -6,6 +6,7 @@ function notifyAdminsNewTicket(ticket) {
 }
 
 function notifyAdminsMessage(ticketId, messagePayload) {
+  console.log("notifyAdminsMessage", ticketId, messagePayload);
   const io = getIO();
   io.to("role:admin").emit("admin-message", { ticketId, ...messagePayload });
 }
@@ -21,6 +22,7 @@ function notifyUserStatusChange(userId, ticketId, statusPayload) {
 }
 
 function notifyUserMessage(userId, ticketId, messagePayload) {
+  console.log("notifyUserMessage",userId, ticketId, messagePayload)
   const io = getIO();
   io.to(`user:${userId}`).emit("user-message", { ticketId, ...messagePayload });
 }
