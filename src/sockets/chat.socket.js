@@ -29,10 +29,8 @@ function registerChatSocket(io, socket) {
         };
         if (toAddress.startsWith("user:")) {
           const userId = toAddress.split(":")[1];
-          io.to(toAddress).emit("user-message-at-message-box", payload);
           notifyUserMessage(userId, ticketId, payload);
         } else {
-          io.to(toAddress).emit("admin-message-at-message-box", payload);
           notifyAdminsMessage(ticketId, payload);
         }
       } catch (error) {
