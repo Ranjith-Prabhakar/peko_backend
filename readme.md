@@ -4,7 +4,7 @@ A full-stack real-time ticket management application built with a modular backen
 
 The system supports both **HTTP and WebSocket servers running on the same port**, enabling seamless handling of **non–real-time operations** via REST APIs and **real-time interactions** such as notifications, status updates, and messaging via WebSockets.
 
----
+
 
 ## 🔄 System Workflow
 
@@ -36,7 +36,6 @@ The application is designed to support secure authentication, real-time communic
 - Only the **admin** and the **user who created the ticket** can communicate
 - Users can only close tickets, not update other statuses
 
----
 
 ## 🛠️ Tech Stack
 
@@ -59,10 +58,7 @@ The application is designed to support secure authentication, real-time communic
 - Modular Architecture (Controller → Service → Repository)
 - Middleware-level & DB Schema Validations
 
----
 
-
----
 
 ## 🚀 Running the Project Locally
 
@@ -71,37 +67,40 @@ The application is designed to support secure authentication, real-time communic
 - MySQL
 - Redis
 
----
+
 
 ## 🔧 Frontend Setup
 
 ```bash
-git clone <frontend-repo-url>
-cd frontend
+git clone https://github.com/Ranjith-Prabhakar/peko_frontend.git
+cd peko_frontend
 npm install
-Create a .env file:
+```
+Create a .env file and add the belows:
+```bash
+    VITE_API_BASE_URL=http://localhost:8000/api/v1
+    VITE_SOCKET_URL=ws://localhost:8000
+```
 
-env
-Copy code
-VITE_API_BASE_URL=http://localhost:<PORT>
-VITE_SOCKET_URL=ws://localhost:<PORT>
 Start the frontend:
+``` baah
+   npm run dev
+```
+## 🔧 Backend Setup
 
-bash
-Copy code
-npm run dev
-🔧 Backend Setup
-bash
-Copy code
-git clone <backend-repo-url>
-cd backend
-npm install
+```bash
+    git clone git@github.com:Ranjith-Prabhakar/peko_backend.git
+    cd peko_backend
+    npm install
+```
 Create a .env file with required configuration (DB, Redis, JWT secrets).
 
-Run database migrations from the migration folder in the project root.
-
+``` bash
+    npx sequelize-cli db:migrate
+```
 Start the backend server:
 
-bash
-Copy code
-npm run dev
+``` bash
+    npm run dev
+```
+🌍 Deployment link will be shared here soon
