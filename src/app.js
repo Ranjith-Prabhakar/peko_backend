@@ -10,6 +10,9 @@ const app = express();
 
 appLevelMiddleWares(app);
 
+app.use("/test", (req, res) => {
+  res.status(200).json({ message: "API is working!" });
+});
 app.use(baseUrl, routes());
 
 app.use(pageNotFound);
