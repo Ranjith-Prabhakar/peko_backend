@@ -11,9 +11,9 @@ function appLevelMiddleWares(app) {
     console.log(req.url);
     next();
   });
-  // app.use(helmet());
-  // app.use(rateLimit(rateLimitOptions));
-  app.use(cors({ origin: "https://peko-frontend-mu.vercel.app",withCredentials:true }));
+  app.use(helmet());
+  app.use(rateLimit(rateLimitOptions));
+  app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
